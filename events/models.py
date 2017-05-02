@@ -22,7 +22,7 @@ class DayEvent(models.Model):
 
 class PeriodEvent(models.Model):
     month = models.IntegerField(default=0)
-    day = models.DateField(auto_now_add=False)
+    day = models.DateField(auto_now=False, auto_now_add=False)
     project_id = models.IntegerField()
     message_id = models.IntegerField()
     visit = models.IntegerField(default=0)
