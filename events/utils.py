@@ -18,7 +18,7 @@ def get_project_analytics_by_period(project_id, period):
                 if not result.get(event):
                     result[event] = create_dict_by_hour()
                 for key in result[event]:
-                    if key.hour == msg.hour:
+                    if key.hour == msg.hour and key.day == msg.day.day:
                         result[event][key] += get_parameter_value(msg, event)
     elif period == PERIOD_WEEK:
         day = dt.date.today() - dt.timedelta(days=6)
@@ -86,7 +86,7 @@ def get_message_analytics_by_period(msg_id, period):
                 if not result.get(event):
                     result[event] = create_dict_by_hour()
                 for key in result[event]:
-                    if key.hour == msg.hour:
+                    if key.hour == msg.hour and key.day == msg.day.day:
                         result[event][key] = get_parameter_value(msg, event)
     elif period == PERIOD_WEEK:
         day = dt.date.today() - dt.timedelta(days=6)
