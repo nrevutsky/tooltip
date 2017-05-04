@@ -8,7 +8,7 @@ if not settings.configured:
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tooltip_analytics.settings_production')
 
 app = Celery('tooltip_analytics')
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 
