@@ -7,7 +7,7 @@ from .models import DayEvent, PeriodEvent, GeneralEvent
 EVENTS = ['visit', 'trigger', 'click', 'close', 'goal']
 
 
-@periodic_task(run_every=dt.timedelta(seconds=300))
+@periodic_task(run_every=dt.timedelta(seconds=60))
 def save_events_count_to_db():
     general_events = cache.get('events_general')
     empty_hours = []
