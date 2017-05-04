@@ -76,13 +76,27 @@ WSGI_APPLICATION = 'tooltip_analytics.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tooltipdb',
+        'USER': 'tooltip_user',
+        'PASSWORD': 'tooltippass',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -135,6 +149,3 @@ CACHES = {
         }
     }
 }
-
-# celery
-BROKER_URL = 'redis://localhost:6379/0'

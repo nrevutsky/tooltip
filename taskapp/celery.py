@@ -5,7 +5,7 @@ from django.conf import settings
 
 if not settings.configured:
     # set the default Django settings module for the 'celery' program.
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tooltip_analytics.settings_production')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tooltip_analytics.settings')
 
 app = Celery('tooltip_analytics')
 app.config_from_object('django.conf:settings')
