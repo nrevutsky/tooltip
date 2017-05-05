@@ -47,26 +47,33 @@ def save_event(msg, event, count):
 
 
 def save_to_event_db(pr_id, msg_id, msg_count, event_name, date_event):
-    current_day = dt.datetime.now().day
-    msg, created = DayEvent.objects.get_or_create(hour=date_event.hour,
-                                                  project_id=pr_id,
-                                                  message_id=msg_id)
-    msg_day, created_day = PeriodEvent.objects.get_or_create(day=date_event.date(),
-                                                             project_id=pr_id,
-                                                             message_id=msg_id)
+    # day
+    if date_event >= (dt.datetime.now().replace(minute=0, second=0) - dt.timedelta(days=1)):
+        hours_diff = dt.datetime.now().replace(minute=0, second=0) - date_event
+        msg, created = DayEvent.objects.get_or_create(hour=int(hours_diff.total_seconds()/3600),
+                                                      project_id=pr_id,
+                                                      message_id=msg_id)
+        if not created and msg.day != date_event.date():
+            msg.day = date_event.date()
+            reset_event(msg)
+        if created:
+            msg.day = date_event.date()
+        save_event(msg, event_name, msg_count)
+        msg.save()
+
+    # period
+    if date_event >= (dt.datetime.now().replace(minute=0, second=0) - dt.timedelta(days=30)):
+        msg_day, created_day = PeriodEvent.objects.get_or_create(day=date_event.date(),
+                                                                 project_id=pr_id,
+                                                                 message_id=msg_id)
+        save_event(msg_day, event_name, msg_count)
+        msg_day.month = dt.datetime.now().month
+        msg_day.save()
+
+    # general
     msg_general, created_general = GeneralEvent.objects.get_or_create(project_id=pr_id,
                                                                       message_id=msg_id)
     save_event(msg_general, event_name, msg_count)
-    save_event(msg_day, event_name, msg_count)
-    if not created and msg.day != dt.date.today():
-        msg.day = dt.date.today()
-        reset_event(msg)
-    if created:
-        msg.day = dt.date.today()
-    save_event(msg, event_name, msg_count)
-    msg_day.month = dt.datetime.now().month
-    msg.save()
-    msg_day.save()
     msg_general.save()
 
 
