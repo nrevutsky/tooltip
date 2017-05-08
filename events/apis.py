@@ -12,7 +12,7 @@ import datetime as dt
 def receive_events_data(request):
     if request.data:
         if request.data.get('secret') == settings.SECRET_KEY_API:
-            event_date = dt.datetime.fromtimestamp(request.data.get('time_stamp')).replace(minute=0, second=0)
+            event_date = dt.datetime.fromtimestamp(int(request.data.get('time_stamp'))).replace(minute=0, second=0)
             events_general = cache.get('events_general')
             if not events_general:
                 events_general = {}
