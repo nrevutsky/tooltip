@@ -8,8 +8,8 @@ from .managers import DayEventQuerySet, PeriodEventQuerySet
 class DayEvent(models.Model):
     day = models.DateField(auto_now=False, auto_now_add=False, null=True)
     hour = models.IntegerField()
-    project_id = models.IntegerField()
-    message_id = models.IntegerField()
+    project_id = models.CharField(max_length=100)
+    message_id = models.CharField(max_length=100)
     visit = models.IntegerField(default=0)
     trigger = models.IntegerField(default=0)
     click = models.IntegerField(default=0)
@@ -23,8 +23,8 @@ class DayEvent(models.Model):
 class PeriodEvent(models.Model):
     month = models.IntegerField(default=0)
     day = models.DateField(auto_now=False, auto_now_add=False)
-    project_id = models.IntegerField()
-    message_id = models.IntegerField()
+    project_id = models.CharField(max_length=100)
+    message_id = models.CharField(max_length=100)
     visit = models.IntegerField(default=0)
     trigger = models.IntegerField(default=0)
     click = models.IntegerField(default=0)
@@ -36,8 +36,8 @@ class PeriodEvent(models.Model):
 
 
 class GeneralEvent(models.Model):
-    project_id = models.IntegerField()
-    message_id = models.IntegerField()
+    project_id = models.CharField(max_length=100)
+    message_id = models.CharField(max_length=100)
     visit = models.IntegerField(default=0)
     trigger = models.IntegerField(default=0)
     click = models.IntegerField(default=0)
