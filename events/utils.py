@@ -13,41 +13,45 @@ def get_project_analytics_by_period(project_id, period):
     result = {}
     if period == PERIOD_DAY:
         data = DayEvent.daily_events.get_project_data_by_whole_day(project_id)
-        for msg in data:
+        if data:
+            for msg in data:
+                for event in EVENTS:
+                    if not result.get(event):
+                        result[event] = []
+                        for i in range(0, 24):
+                            result[event].insert(i, 0)
+                    result[event][msg.hour] += get_parameter_value(msg, event)
             for event in EVENTS:
-                if not result.get(event):
-                    result[event] = []
-                    for i in range(0, 24):
-                        result[event].insert(i, 0)
-                result[event][msg.hour] += get_parameter_value(msg, event)
-        for event in EVENTS:
-            result[event] = reversed(result[event])
+                if result.get(event):
+                    result[event] = reversed(result[event])
     elif period == PERIOD_WEEK:
         day = dt.date.today() - dt.timedelta(days=6)
         data = PeriodEvent.periodicals_events.get_project_data_by_period(project_id=project_id, day=day)
-        for day_obj in data:
+        if data:
+            for day_obj in data:
+                for event in EVENTS:
+                    if not result.get(event):
+                        result[event] = {}
+                        for single_date in date_range(day, dt.date.today()):
+                            result[event][single_date.strftime("%Y-%m-%d")] = 0
+                        result[event][dt.date.today().strftime("%Y-%m-%d")] = 0
+                    result[event][day_obj.day.strftime("%Y-%m-%d")] += get_parameter_value(day_obj, event)
             for event in EVENTS:
-                if not result.get(event):
-                    result[event] = {}
-                    for single_date in date_range(day, dt.date.today()):
-                        result[event][single_date.strftime("%Y-%m-%d")] = 0
-                    result[event][dt.date.today().strftime("%Y-%m-%d")] = 0
-                result[event][day_obj.day.strftime("%Y-%m-%d")] += get_parameter_value(day_obj, event)
-        for event in EVENTS:
-            result[event] = collections.OrderedDict(sorted(result[event].items())).values()
+                result[event] = collections.OrderedDict(sorted(result[event].items())).values()
     if period == PERIOD_MONTH:
         day = dt.date.today() - dt.timedelta(days=29)
         data = PeriodEvent.periodicals_events.get_project_data_by_period(project_id=project_id, day=day)
-        for day_obj in data:
+        if data:
+            for day_obj in data:
+                for event in EVENTS:
+                    if not result.get(event):
+                        result[event] = {}
+                        for single_date in date_range(day, dt.date.today()):
+                            result[event][single_date.strftime("%Y-%m-%d")] = 0
+                        result[event][dt.date.today().strftime("%Y-%m-%d")] = 0
+                    result[event][day_obj.day.strftime("%Y-%m-%d")] += get_parameter_value(day_obj, event)
             for event in EVENTS:
-                if not result.get(event):
-                    result[event] = {}
-                    for single_date in date_range(day, dt.date.today()):
-                        result[event][single_date.strftime("%Y-%m-%d")] = 0
-                    result[event][dt.date.today().strftime("%Y-%m-%d")] = 0
-                result[event][day_obj.day.strftime("%Y-%m-%d")] += get_parameter_value(day_obj, event)
-        for event in EVENTS:
-            result[event] = collections.OrderedDict(sorted(result[event].items())).values()
+                result[event] = collections.OrderedDict(sorted(result[event].items())).values()
     return result
 
 
@@ -84,41 +88,45 @@ def get_message_analytics_by_period(msg_id, period):
     result = {}
     if period == PERIOD_DAY:
         data = DayEvent.daily_events.get_message_data_by_whole_day(message_id=msg_id)
-        for msg in data:
+        if data:
+            for msg in data:
+                for event in EVENTS:
+                    if not result.get(event):
+                        result[event] = []
+                        for i in range(0, 24):
+                            result[event].insert(i, 0)
+                    result[event][msg.hour] = get_parameter_value(msg, event)
             for event in EVENTS:
-                if not result.get(event):
-                    result[event] = []
-                    for i in range(0, 24):
-                        result[event].insert(i, 0)
-                result[event][msg.hour] = get_parameter_value(msg, event)
-        for event in EVENTS:
-            result[event] = reversed(result[event])
+                if result.get(event):
+                    result[event] = reversed(result[event])
     elif period == PERIOD_WEEK:
         day = dt.date.today() - dt.timedelta(days=6)
         data = PeriodEvent.periodicals_events.get_message_data_by_period(message_id=msg_id, day=day)
-        for day_obj in data:
+        if data:
+            for day_obj in data:
+                for event in EVENTS:
+                    if not result.get(event):
+                        result[event] = {}
+                        for single_date in date_range(day, dt.date.today()):
+                            result[event][single_date.strftime("%Y-%m-%d")] = 0
+                        result[event][dt.date.today().strftime("%Y-%m-%d")] = 0
+                    result[event][day_obj.day.strftime("%Y-%m-%d")] = get_parameter_value(day_obj, event)
             for event in EVENTS:
-                if not result.get(event):
-                    result[event] = {}
-                    for single_date in date_range(day, dt.date.today()):
-                        result[event][single_date.strftime("%Y-%m-%d")] = 0
-                    result[event][dt.date.today().strftime("%Y-%m-%d")] = 0
-                result[event][day_obj.day.strftime("%Y-%m-%d")] = get_parameter_value(day_obj, event)
-        for event in EVENTS:
-            result[event] = collections.OrderedDict(sorted(result[event].items())).values()
+                result[event] = collections.OrderedDict(sorted(result[event].items())).values()
     elif period == PERIOD_MONTH:
         day = dt.date.today() - dt.timedelta(days=29)
         data = PeriodEvent.periodicals_events.get_message_data_by_period(message_id=msg_id, day=day)
-        for day_obj in data:
+        if data:
+            for day_obj in data:
+                for event in EVENTS:
+                    if not result.get(event):
+                        result[event] = {}
+                        for single_date in date_range(day, dt.date.today()):
+                            result[event][single_date.strftime("%Y-%m-%d")] = 0
+                        result[event][dt.date.today().strftime("%Y-%m-%d")] = 0
+                    result[event][day_obj.day.strftime("%Y-%m-%d")] = get_parameter_value(day_obj, event)
             for event in EVENTS:
-                if not result.get(event):
-                    result[event] = {}
-                    for single_date in date_range(day, dt.date.today()):
-                        result[event][single_date.strftime("%Y-%m-%d")] = 0
-                    result[event][dt.date.today().strftime("%Y-%m-%d")] = 0
-                result[event][day_obj.day.strftime("%Y-%m-%d")] = get_parameter_value(day_obj, event)
-        for event in EVENTS:
-            result[event] = collections.OrderedDict(sorted(result[event].items())).values()
+                result[event] = collections.OrderedDict(sorted(result[event].items())).values()
     return result
 
 
