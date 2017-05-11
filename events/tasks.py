@@ -2,6 +2,7 @@ from django.core.cache import cache
 import datetime as dt
 from celery.task import periodic_task
 from .models import DayEvent, PeriodEvent, GeneralEvent
+from django.db import transaction
 
 
 EVENTS = ['visit', 'trigger', 'click', 'close', 'goal']
@@ -18,8 +19,9 @@ def save_events_count_to_db():
                 values_to_delete = {}
                 for project_id, project_body in event.iteritems():
                     for message_id, message_count in project_body.iteritems():
-                        save_to_event_db(project_id, message_id, message_count, event_name, hour)
-                        values_to_delete[message_id] = project_id
+                        with transaction.atomic():
+                            save_to_event_db(project_id, message_id, message_count, event_name, hour)
+                            values_to_delete[message_id] = project_id
                 for msg_id, pr_id in values_to_delete.iteritems():
                     del event.get(pr_id)[msg_id]
                     if not event.get(pr_id):
