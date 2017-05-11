@@ -12,27 +12,28 @@ EVENTS = ['visit', 'trigger', 'click', 'close', 'goal']
 def save_events_count_to_db():
     general_events = cache.get('events_general')
     empty_hours = []
-    for hour in general_events:
-        for event_name in EVENTS:
-            event = general_events[hour].get(event_name)
-            if event:
-                values_to_delete = {}
-                for project_id, project_body in event.iteritems():
-                    for message_id, message_count in project_body.iteritems():
-                        with transaction.atomic():
-                            save_to_event_db(project_id, message_id, message_count, event_name, hour)
-                            values_to_delete[message_id] = project_id
-                for msg_id, pr_id in values_to_delete.iteritems():
-                    del event.get(pr_id)[msg_id]
-                    if not event.get(pr_id):
-                        del event[pr_id]
-                    if not event:
-                        del general_events[hour][event_name]
-        if not general_events[hour]:
-            empty_hours.append(hour)
-    for empty_hour in empty_hours:
-        del general_events[empty_hour]
-    cache.set('events_general', general_events)
+    if general_events:
+        for hour in general_events:
+            for event_name in EVENTS:
+                event = general_events[hour].get(event_name)
+                if event:
+                    values_to_delete = {}
+                    for project_id, project_body in event.iteritems():
+                        for message_id, message_count in project_body.iteritems():
+                            with transaction.atomic():
+                                save_to_event_db(project_id, message_id, message_count, event_name, hour)
+                                values_to_delete[message_id] = project_id
+                    for msg_id, pr_id in values_to_delete.iteritems():
+                        del event.get(pr_id)[msg_id]
+                        if not event.get(pr_id):
+                            del event[pr_id]
+                        if not event:
+                            del general_events[hour][event_name]
+            if not general_events[hour]:
+                empty_hours.append(hour)
+        for empty_hour in empty_hours:
+            del general_events[empty_hour]
+        cache.set('events_general', general_events)
 
 
 def save_event(msg, event, count):
