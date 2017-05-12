@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'tooltip_analytics.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tooltipdb',
+        'NAME': 'tooltips',
         'USER': 'tooltip_user',
         'PASSWORD': 'tooltippass',
         'HOST': '172.31.6.238',
