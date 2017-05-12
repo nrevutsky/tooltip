@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import pytz
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,7 +27,7 @@ SECRET_KEY = '6y!9iiss(lf-we2dtg9r4#j!mvg2a^c%sk419st!0314#6^h3i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '34.205.89.221']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.elb.amazonaws.com', '*']
 
 
 # Application definition
@@ -92,7 +93,7 @@ DATABASES = {
         'NAME': 'tooltipdb',
         'USER': 'tooltip_user',
         'PASSWORD': 'tooltippass',
-        'HOST': 'localhost',
+        'HOST': '172.31.6.238',
         'PORT': '',
     }
 }
