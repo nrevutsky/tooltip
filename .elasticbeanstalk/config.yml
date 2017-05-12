@@ -1,6 +1,6 @@
 branch-defaults:
   elasticbeanstalk:
-    environment: null
+    environment: tooltip
 global:
   application_name: tooltip
   branch: null
