@@ -15,6 +15,10 @@ sudo chkconfig redis on
 echo "Redis OK"
 }
 
+start_httpd() {
+service httpd restart
+}
+
 install_rec
 install_redis
-
+start_httpd
