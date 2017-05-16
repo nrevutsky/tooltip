@@ -36,7 +36,7 @@ def receive_events_data(request):
             events_by_hour[request.data.get('event_type')] = event
             events_general[event_date] = events_by_hour
             cache.set('events_general', events_general)
-            save_events_count_to_db()
+            # save_events_count_to_db()
             return Response(status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
