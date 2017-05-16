@@ -18,9 +18,9 @@ class DayEventQuerySet(models.QuerySet):
 
 class PeriodEventQuerySet(models.QuerySet):
     def get_project_data_by_period(self, project_id, day):
-        data = self.filter((models.Q(project_id=project_id, day__gte=day)))
+        data = self.filter((models.Q(project_id=project_id, day__gte=day, day__lte=dt.date.today())))
         return data
 
     def get_message_data_by_period(self, message_id, day):
-        data = self.filter((models.Q(message_id=message_id, day__gte=day)))
+        data = self.filter((models.Q(message_id=message_id, day__gte=day, day__lte=dt.date.today())))
         return data
