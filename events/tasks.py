@@ -52,14 +52,12 @@ def save_event(msg, event, count):
 def save_to_event_db(pr_id, msg_id, msg_count, event_name, date_event):
     # day
     if date_event >= (dt.datetime.now().replace(minute=0, second=0) - dt.timedelta(days=1)):
-        hours_diff = dt.datetime.now().replace(minute=0, second=0) - date_event
-        msg, created = DayEvent.objects.get_or_create(hour=int(hours_diff.total_seconds()/3600),
+        hour = date_event.hour
+        msg, created = DayEvent.objects.get_or_create(hour=hour,
                                                       project_id=pr_id,
                                                       message_id=msg_id)
-        if not created and msg.day != date_event.date():
-            msg.day = date_event.date()
+        if not msg.day == date_event.date():
             reset_event(msg)
-        if created:
             msg.day = date_event.date()
         save_event(msg, event_name, msg_count)
         msg.save()
@@ -69,8 +67,12 @@ def save_to_event_db(pr_id, msg_id, msg_count, event_name, date_event):
         msg_day, created_day = PeriodEvent.objects.get_or_create(day=date_event.date(),
                                                                  project_id=pr_id,
                                                                  message_id=msg_id)
+        msg_day.month = date_event.month
+        if created_day:
+            PeriodEvent.objects.filter(day=date_event.date().replace(month=date_event.month-1),
+                                       project_id=pr_id,
+                                       message_id=msg_id).delete()
         save_event(msg_day, event_name, msg_count)
-        msg_day.month = dt.datetime.now().month
         msg_day.save()
 
     # general
