@@ -50,4 +50,4 @@ class RawRequest(models.Model):
     message_id = models.CharField(max_length=100, null=True, blank=True)
     user_id = models.CharField(max_length=100, null=True, blank=True)
     event_type = models.CharField(max_length=20, null=True, blank=True)
-    time_stamp = models.DateTimeField(null=True, blank=True)
+    time_stamp = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
