@@ -43,7 +43,7 @@ def receive_events_data(request):
                 try:
                     date = dt.datetime.fromtimestamp(int(request.data.get('time_stamp')))
                     tz = pytz.timezone('Europe/Kiev')
-                    date.replace(tzinfo=tz)
+                    date = tz.localize(date)
                     RawRequest.objects.create(project_id=request.data.get('project_id'),
                                               message_id=request.data.get('message_id'),
                                               user_id=request.data.get('user_id'),
