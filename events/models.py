@@ -43,3 +43,11 @@ class GeneralEvent(models.Model):
     click = models.IntegerField(default=0)
     close = models.IntegerField(default=0)
     goal = models.IntegerField(default=0)
+
+
+class RawRequest(models.Model):
+    project_id = models.CharField(max_length=100, null=True, blank=True)
+    message_id = models.CharField(max_length=100, null=True, blank=True)
+    user_id = models.CharField(max_length=100, null=True, blank=True)
+    event_type = models.CharField(max_length=20, null=True, blank=True)
+    time_stamp = models.DateTimeField(null=True, blank=True)

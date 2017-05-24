@@ -6,6 +6,7 @@ from .tasks import save_events_count_to_db
 from rest_framework import status
 from .utils import get_project_analytics_by_period, get_general_data, get_message_analytics_by_period
 import datetime as dt
+from models import RawRequest
 
 
 @api_view(['POST'])
@@ -37,6 +38,16 @@ def receive_events_data(request):
             events_general[event_date] = events_by_hour
             cache.set('events_general', events_general)
             # save_events_count_to_db()
+            if settings.WRITE_REQUEST_TO_DB:
+                try:
+                    RawRequest.objects.create(project_id=request.data.get('project_id'),
+                                              message_id=request.data.get('message_id'),
+                                              user_id=request.data.get('user_id'),
+                                              event_type=request.data.get('event_type'),
+                                              time_stamp=dt.datetime.fromtimestamp(int(request.data.get('time_stamp'))).
+                                              strftime('%Y-%m-%d %H:%M:%S'))
+                except:
+                    pass
             return Response(status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 

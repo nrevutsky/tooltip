@@ -154,3 +154,5 @@ CACHES = {
         }
     }
 }
+
+WRITE_REQUEST_TO_DB = True
