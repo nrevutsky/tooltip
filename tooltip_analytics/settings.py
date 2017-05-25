@@ -155,4 +155,4 @@ CACHES = {
     }
 }
 
-WRITE_REQUEST_TO_DB = False
+WRITE_REQUEST_TO_DB = True
